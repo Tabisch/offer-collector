@@ -1,5 +1,4 @@
 const express = require("express")
-const db = require("database")
 
 const app = express()
 const port = 3000

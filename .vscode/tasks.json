@@ -10,6 +10,16 @@
           "reveal": "always",
           "panel": "new"
         }
+      },
+      {
+        "label": "Install NPM packages",
+        "type": "shell",
+        "command": "npm install",
+        "group": "none",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        }
       }
     ]
 }

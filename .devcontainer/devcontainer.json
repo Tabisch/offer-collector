@@ -2,7 +2,7 @@
     "dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    "updateContentCommand": "npm install",
+    "updateContentCommand": "",
     "postCreateCommand": "",
     "postAttachCommand": "",
     "customizations": {
