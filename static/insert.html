@@ -1,8 +1,8 @@
 <form action="/insertData" method="post">
-    <label for="item">
-        item
+    <label for="product">
+        product
     </label>
-    <input type="text" id="productName" name="productName">
+    <input type="text" id="product" name="product">
     <br>
     <label for="seller">
         seller
@@ -12,17 +12,17 @@
     <label for="price">
         price
     </label>
-    <input type="number" id="price" name="price">
+    <input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="price" name="price">
     <br>
-    <label for="startDate">
+    <label for="startDateTime">
         starttime
     </label>
-    <input type="datetime-local" id="startDate" name="startDate">
+    <input type="datetime-local" id="startDateTime" name="startDateTime">
     <br>
-    <label for="endDate">
+    <label for="endDateTime">
         endtime
     </label>
-    <input type="datetime-local" id="endDate" name="endDate">
+    <input type="datetime-local" id="endDateTime" name="endDateTime">
     <br>
     <input type="submit" value="Submit">
 </form>
