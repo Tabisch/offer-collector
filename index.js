@@ -35,9 +35,11 @@ app.post("/insertData", (req, res) => {
 app.get("/rows", async (req, res) => {
     const offers = await Offer.find()
 
-    console.log(offers)
-
     res.send(offers)
+})
+
+app.get("/overview", async (req, res) => {
+    res.sendFile(path.join(__dirname) + "/static/overview.html")
 })
 
 app.listen(port, () => {
