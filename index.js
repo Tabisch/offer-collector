@@ -33,7 +33,15 @@ app.post("/insertData", (req, res) => {
 })
 
 app.get("/rows", async (req, res) => {
-    const offers = await Offer.find()
+    seller = req.query.seller
+
+    let offers = {}
+
+    if(seller) {
+        offers = await Offer.find({"seller": seller})
+    } else {
+        offers = await Offer.find()
+    }
 
     res.send(offers)
 })
