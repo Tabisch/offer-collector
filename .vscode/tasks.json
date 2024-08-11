@@ -2,10 +2,20 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "Run Dev Server",
+        "label": "Run Backend-Dev Server",
         "type": "shell",
-        "command": "npm run dev",
-        "group": "test",
+        "command": "cd ./backend && npm run dev",
+        "group": "",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Run Frontend-Dev Server",
+        "type": "shell",
+        "command": "cd ./frontend && npm run dev",
+        "group": "",
         "presentation": {
           "reveal": "always",
           "panel": "new"
