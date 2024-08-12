@@ -1,6 +1,8 @@
-const express = require("express")
-const path = require('path');
-const Offer = require('./schemas/offerSchema')
+import express from 'express'
+import path from 'path'
+import Offer from './schemas/offerSchema.mjs'
+import LastFetch from './schemas/lastFetch.mjs'
+import { runMonitors } from './runMonitors.mjs'
 
 const app = express()
 const port = 3000
@@ -29,21 +31,28 @@ app.post("/insertData", (req, res) => {
 
     of.save()
 
-    res.sendFile(path.join(__dirname) + "/static/insertDone.html")
+    let lf = LastFetch.findOneAndUpdate({
+        seller: req.body.seller
+    }, {
+        seller: req.body.seller,
+        fetchTime: (new Date).toISOString()
+    }, { 
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true 
+    })
+
+    console.log(lf.seller)
+
+    res.send(200)
 })
 
 app.get("/rows", async (req, res) => {
-    seller = req.query.seller
+    res.send(await Offer.find())
+})
 
-    let offers = {}
-
-    if(seller) {
-        offers = await Offer.find({"seller": seller})
-    } else {
-        offers = await Offer.find()
-    }
-
-    res.send(offers)
+app.get("/lastFetch", async (req, res) => {
+    res.send(await LastFetch.findOne({ seller: req.body.seller }))
 })
 
 app.get("/overview", async (req, res) => {
@@ -53,3 +62,5 @@ app.get("/overview", async (req, res) => {
 app.listen(port, () => {
     console.log(`App listening on ${port}`)
 })
+
+await runMonitors()

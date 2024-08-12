@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const connectionString = "mongodb://db/offers";
@@ -15,4 +15,4 @@ const offerSchema = new Schema({
 
 const Offer = model('Offer', offerSchema);
 
-module.exports = Offer;
+export default Offer;
