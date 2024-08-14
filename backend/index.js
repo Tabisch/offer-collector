@@ -18,8 +18,8 @@ app.get("/insertData", (req, res) => {
     res.sendFile(path.join(__dirname) + "/static/insert.html")
 })
 
-app.post("/insertData", (req, res) => {
-    console.log(req.body)
+app.post("/insertData", async (req, res) => {
+    console.log(req.body.seller)
 
     const of = new Offer({
         product: req.body.product,
@@ -29,20 +29,17 @@ app.post("/insertData", (req, res) => {
         endDateTime: req.body.endDateTime
     })
 
-    of.save()
+    await of.save()
 
-    let lf = LastFetch.findOneAndUpdate({
-        seller: req.body.seller
-    }, {
-        seller: req.body.seller,
-        fetchTime: (new Date).toISOString()
-    }, { 
+    const filter = { seller: req.body.seller }
+    const update = { fetchTime: (new Date).toISOString() }
+    const options = {
         upsert: true,
         new: true,
-        setDefaultsOnInsert: true 
-    })
+        setDefaultsOnInsert: true
+    }
 
-    console.log(lf.seller)
+    const lf = await LastFetch.findOneAndUpdate(filter, update, options)
 
     res.send(200)
 })
@@ -52,7 +49,16 @@ app.get("/rows", async (req, res) => {
 })
 
 app.get("/lastFetch", async (req, res) => {
-    res.send(await LastFetch.findOne({ seller: req.body.seller }))
+    const last = await LastFetch.findOne({ seller: req.query.seller }, { _id: 0, __v: 0 })
+
+    if (last === null) {
+        res.send({
+            seller: req.query.seller,
+            fetchTime: "1970-01-01T00:00:00.000Z"
+        })
+    } else {
+        res.send(last)
+    }
 })
 
 app.get("/overview", async (req, res) => {
@@ -63,4 +69,4 @@ app.listen(port, () => {
     console.log(`App listening on ${port}`)
 })
 
-await runMonitors()
+runMonitors()

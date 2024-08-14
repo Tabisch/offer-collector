@@ -14,7 +14,7 @@
       {
         "label": "Run Frontend-Dev Server",
         "type": "shell",
-        "command": "cd ./frontend && npm run dev",
+        "command": "cd ./frontend && npm start",
         "group": "",
         "presentation": {
           "reveal": "always",

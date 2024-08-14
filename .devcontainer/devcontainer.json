@@ -2,7 +2,7 @@
     "dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    "updateContentCommand": "",
+    "updateContentCommand": "npm install -g @angular/cli",
     "postCreateCommand": "",
     "postAttachCommand": "",
     "customizations": {
@@ -11,9 +11,9 @@
 				"streetsidesoftware.code-spell-checker",
 				"dbaeumer.vscode-eslint",
 				"mongodb.mongodb-vscode",
-                "ms-azuretools.vscode-docker"
+                "ms-azuretools.vscode-docker",
 			]
         }
     },
-    "forwardPorts": [3000]
+    "forwardPorts": [3000,4200]
 }

@@ -2,6 +2,15 @@ import { json } from "express";
 
 export async function importStroetmann() {
 
+    const offSet = 24 * 60 * 60 * 1000
+    const timeNow = new Date()
+    const lastfetched = new Date((await (await fetch("http://localhost:3000/lastFetch?seller=stroetmann")).json())["fetchTime"])
+
+    if(timeNow - lastfetched < offSet){
+        console.log(`stroetmann - abort Update`)
+        return
+    }
+
     const collections = await (await fetch("https://katalog.stroetmann.de/api/collections/me")).json()
 
     collections.forEach(async (collection) => {

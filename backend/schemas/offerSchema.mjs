@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const connectionString = "mongodb://db/offers";
+const connectionString = "mongodb://db/offers-collector";
 
 mongoose.connect(connectionString);
 
