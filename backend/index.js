@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import path from 'path'
 import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetch.mjs'
@@ -9,6 +10,7 @@ const port = 3000
 
 app.use(express.json())
 app.use(express.urlencoded())
+app.use(cors())
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname) + "/static/index.html")

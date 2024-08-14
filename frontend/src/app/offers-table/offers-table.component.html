@@ -1,0 +1,46 @@
+<div class="container-fluid">
+    <input type="text" [(ngModel)]="filter">
+
+    <div class="row p-2">
+      <div class="col-6 mx-auto">
+        <table class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th>product</th>
+              <th>seller</th>
+              <th>price</th>
+              <th>startDateTime</th>
+              <th>endDateTime</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of dataTable; let i=index">
+              <td>
+                <input type="text" class="form-control form-control-sm" id="id-{{i}}" name="id-{{i}}"
+                  [(ngModel)]="item.product" (ngModelChange)="onChange($event)">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" id="title-{{i}}" name="title-{{i}}"
+                  [(ngModel)]="item.seller" (ngModelChange)="onChange($event)">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" id="title-{{i}}" name="title-{{i}}"
+                  [(ngModel)]="item.price" (ngModelChange)="onChange($event)">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" id="title-{{i}}" name="title-{{i}}"
+                  [ngModel]="item.startDateTime | date: 'dd-MM-yyyy'" (ngModelChange)="onChange($event)">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" id="title-{{i}}" name="title-{{i}}"
+                  [ngModel]="item.endDateTime | date: 'dd-MM-yyyy'" (ngModelChange)="onChange($event)">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+  </div>
+
+  <router-outlet></router-outlet>
