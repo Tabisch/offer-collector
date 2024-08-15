@@ -41,9 +41,9 @@ export class OffersTableComponent implements OnInit {
   }
 
   async filterData() {
-    this.dataTable = this.dataFetched.filter((offer: any) => offer.seller.includes(this._filter))
+    this.dataTable = this.dataFetched.filter((offer: any) => (offer.seller.includes(this._filter) || offer.product.includes(this._filter)))
   }
-  
+
   onChange(event:any) {
     console.log('onChange:' + JSON.stringify(event));
   }
