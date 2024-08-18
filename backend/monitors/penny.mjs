@@ -19,8 +19,6 @@ export async function importPenny() {
 
     let categoryDateRanges = {}
 
-    console.log(timeNow)
-
     Object.keys(fetched["categoriesMenuPeriod"]).forEach((categoriesMenuPeriodKey) => {
         categoryDateRanges[fetched["categoriesMenuPeriod"][categoriesMenuPeriodKey]["slug"]] = {
             "startTime": pennyDate(timeNow, fetched["categoriesMenuPeriod"][categoriesMenuPeriodKey]["startDayIndex"]),
