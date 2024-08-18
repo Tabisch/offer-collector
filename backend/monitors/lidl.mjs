@@ -96,7 +96,5 @@ function traverseTreeRecurse(tree, offerList) {
         Object.keys(tree).forEach((key) => {
             traverseTreeRecurse(tree[key], offerList)
         })
-
-        return
     }
 }
