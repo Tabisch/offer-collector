@@ -7,3 +7,5 @@ export async function runMonitors() {
     importPenny()
     importLidl()
 }
+
+setInterval(runMonitors, (5 * 60 * 1000));
