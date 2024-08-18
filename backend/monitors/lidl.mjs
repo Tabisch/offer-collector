@@ -66,8 +66,6 @@ export async function importLidl() {
 function traverseTree(tree) {
     const list = []
 
-    console.log(list)
-
     traverseTreeRecurse(tree, list)
 
     return list
