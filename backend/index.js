@@ -4,6 +4,7 @@ import path from 'path'
 import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetch.mjs'
 import { runMonitors } from './runMonitors.mjs'
+import { importLidl } from './monitors/lidl.mjs'
 
 const app = express()
 const port = 3000
@@ -21,7 +22,7 @@ app.get("/insertData", (req, res) => {
 })
 
 app.post("/insertData", async (req, res) => {
-    console.log(req.body.seller)
+    //console.log(req.body.seller)
 
     const of = new Offer({
         product: req.body.product,
