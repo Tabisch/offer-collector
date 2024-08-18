@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
+    "fast-xml-parser": "^4.4.1",
     "mongoose": "^8.5.2"
   },
   "devDependencies": {
