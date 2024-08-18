@@ -1,5 +1,4 @@
-import { json } from "express";
-import { XMLParser, XMLBuilder, XMLValidator } from "fast-xml-parser";
+import { XMLParser } from "fast-xml-parser";
 
 export async function importLidl() {
     const monitorName = "lidl"
