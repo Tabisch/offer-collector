@@ -5,4 +5,5 @@ import { importPenny } from "./monitors/penny.mjs";
 export async function runMonitors() {
     importStroetmann()
     importPenny()
+    importLidl()
 }
