@@ -4,7 +4,6 @@ import path from 'path'
 import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetch.mjs'
 import { runMonitors } from './runMonitors.mjs'
-import { importLidl } from './monitors/lidl.mjs'
 
 const app = express()
 const port = 3000
@@ -24,27 +23,30 @@ app.get("/insertData", (req, res) => {
 app.post("/insertData", async (req, res) => {
     //console.log(req.body.seller)
 
-    const of = new Offer({
-        product: req.body.product,
-        seller: req.body.seller,
-        price: req.body.price,
-        startDateTime: req.body.startDateTime,
-        endDateTime: req.body.endDateTime
-    })
-
-    await of.save()
-
-    const filter = { seller: req.body.seller }
-    const update = { fetchTime: (new Date).toISOString() }
     const options = {
         upsert: true,
         new: true,
         setDefaultsOnInsert: true
     }
 
-    const lf = await LastFetch.findOneAndUpdate(filter, update, options)
+    const filterOffer = {
+        product: req.body.product,
+        seller: req.body.seller,
+        price: req.body.price,
+        startDateTime: req.body.startDateTime,
+        endDateTime: req.body.endDateTime
+    }
 
-    res.send(200)
+    const of = await Offer.findOneAndUpdate(filterOffer, filterOffer, options)
+
+    await of.save()
+
+    const filterLastFetch = { seller: req.body.seller }
+    const update = { fetchTime: (new Date).toISOString() }
+    
+    const lf = await LastFetch.findOneAndUpdate(filterLastFetch, update, options)
+
+    res.sendStatus(200)
 })
 
 app.get("/rows", async (req, res) => {
