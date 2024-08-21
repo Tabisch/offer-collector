@@ -4,7 +4,7 @@ import { XMLParser } from "fast-xml-parser";
 export async function importTrinkgut() {
     const monitorName = "trinkgut"
 
-    const offSet = 24 * 60 * 60 * 1000
+    const offSet = 1 * 60 * 60 * 1000
     const timeNow = new Date()
     const lastfetched = new Date((await (await fetch(`http://localhost:3000/lastFetch?seller=${monitorName}`)).json())["fetchTime"])
 
@@ -58,8 +58,6 @@ export async function importTrinkgut() {
 
         let offerData = await traverseProductPageTree(offerPage)
 
-        console.log(offerData)
-
         try {
             fetch("http://localhost:3000/insertData", {
                 method: "post",
@@ -79,22 +77,6 @@ export async function importTrinkgut() {
 
         }
     })
-
-    const fetchOfferRaw = await (await fetch(offers[0])).text()
-
-    const optionsOffer = {
-        ignoreAttributes: false,
-        // preserveOrder: true,
-        unpairedTags: ["hr", "br", "link", "meta"],
-        stopNodes: ["*.pre", "*.script"],
-        processEntities: true,
-        htmlEntities: true
-    };
-
-    const parserPage = new XMLParser(optionsOffer);
-    let offerPage = await parser.parse(fetchOfferRaw);
-
-    return offerPage
 }
 
 function traverseTree(tree) {
