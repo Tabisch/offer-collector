@@ -4,7 +4,7 @@ import { XMLParser } from "fast-xml-parser";
 export async function importTrinkgut() {
     const monitorName = "trinkgut"
 
-    const offSet = 1 * 60 * 60 * 1000
+    const offSet = 24 * 60 * 60 * 1000
     const timeNow = new Date()
     const lastfetched = new Date((await (await fetch(`http://localhost:3000/lastFetch?seller=${monitorName}`)).json())["fetchTime"])
 
