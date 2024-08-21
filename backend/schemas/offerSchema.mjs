@@ -6,11 +6,26 @@ const connectionString = "mongodb://db/offers-collector";
 mongoose.connect(connectionString);
 
 const offerSchema = new Schema({
-  product: String,
-  seller: String,
-  price: Number,
-  startDateTime: Date,
-  endDateTime: Date,
+  product: {
+    type: String,
+    required: true
+  },
+  seller: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  startDateTime: {
+    type: Date,
+    required: true
+  },
+  endDateTime: {
+    type: Date,
+    required: true
+  } ,
 });
 
 const Offer = model('Offer', offerSchema);
