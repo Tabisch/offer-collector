@@ -47,7 +47,7 @@ app.post("/insertData", async (req, res) => {
     try {
         await of.save()
     } catch (error) {
-        console.log(error)
+        console.log(`error import: ${req.body.product} - ${req.body.seller}`)
         res.sendStatus(400)
         return
     }
