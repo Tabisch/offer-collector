@@ -4,3 +4,4 @@ Implementations: \
 [x] www.trinkgut.de \
 [x] www.lidl.de \
 [] www.netto-online.de
+[x] filiale.kaufland.de
