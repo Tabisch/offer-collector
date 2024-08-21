@@ -4,6 +4,7 @@ import path from 'path'
 import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetch.mjs'
 import { runMonitors } from './runMonitors.mjs'
+import { importKaufland } from './monitors/kaufland.mjs'
 
 const app = express()
 const port = 3000
@@ -19,6 +20,10 @@ app.get("/", (req, res) => {
 app.get("/insertData", (req, res) => {
     res.sendFile(path.join(__dirname) + "/static/insert.html")
 })
+
+// app.get("/debugJson", async (req, res) => {
+//     res.send(await importKaufland())
+// })
 
 app.post("/insertData", async (req, res) => {
     //console.log(req.body.seller)
@@ -39,7 +44,13 @@ app.post("/insertData", async (req, res) => {
 
     const of = await Offer.findOneAndUpdate(filterOffer, filterOffer, options)
 
-    await of.save()
+    try {
+        await of.save()
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(400)
+        return
+    }
 
     const filterLastFetch = { seller: req.body.seller }
     const update = { fetchTime: (new Date).toISOString() }
