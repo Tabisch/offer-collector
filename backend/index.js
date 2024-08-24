@@ -4,7 +4,6 @@ import path from 'path'
 import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetch.mjs'
 import { runMonitors } from './runMonitors.mjs'
-import { importKaufland } from './monitors/kaufland.mjs'
 
 const app = express()
 const port = 3000
@@ -21,8 +20,8 @@ app.get("/insertData", (req, res) => {
     res.sendFile(path.join(__dirname) + "/static/insert.html")
 })
 
-// app.get("/debugJson", async (req, res) => {
-//     res.send(await importKaufland())
+// app.get("/devDebug", async (req, res) => {
+//     res.send(await importAldiNord())
 // })
 
 app.post("/insertData", async (req, res) => {
