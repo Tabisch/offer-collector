@@ -2,8 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import path from 'path'
 import Offer from './schemas/offerSchema.mjs'
-import LastFetch from './schemas/lastFetch.mjs'
+import LastFetch from './schemas/lastFetchSchema.mjs'
 import { runMonitors } from './runMonitors.mjs'
+import Store from './schemas/storeSchema.mjs'
 
 const app = express()
 const port = 3000
@@ -57,6 +58,32 @@ app.post("/insertData", async (req, res) => {
     const lf = await LastFetch.findOneAndUpdate(filterLastFetch, update, options)
 
     res.sendStatus(200)
+})
+
+app.post("/insertStore", async (req, res) => {
+    //console.log(req.body.seller)
+
+    const options = {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true
+    }
+
+    const filterOffer = {
+        name: req.body.name,
+        group: req.body.group,
+        targetApiIdentifier: req.body.targetApiIdentifier
+    }
+
+    const st = await Store.findOneAndUpdate(filterOffer, filterOffer, options)
+
+    try {
+        await st.save()
+    } catch (error) {
+        console.log(`error import: ${req.body.name} - ${req.body.group} - ${req.body.targetApiIdentifier}`)
+        res.sendStatus(400)
+        return
+    }
 })
 
 app.get("/rows", async (req, res) => {
