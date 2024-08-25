@@ -11,7 +11,7 @@ export async function runMonitors() {
     importLidl()
     importTrinkgut()
     importKaufland()
-    importAldiNord
+    importAldiNord()
 }
 
 setInterval(runMonitors, (5 * 60 * 1000));
