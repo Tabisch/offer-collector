@@ -4,6 +4,7 @@ import { importPenny } from "./monitors/penny.mjs";
 import { importTrinkgut } from "./monitors/trinkgut.mjs";
 import { importKaufland } from "./monitors/kaufland.mjs";
 import { importAldiNord } from "./monitors/aldi-nord.mjs";
+import { importEdeka } from "./monitors/edeka.mjs";
 
 export async function runMonitors() {
     importStroetmann()
@@ -12,6 +13,7 @@ export async function runMonitors() {
     importTrinkgut()
     importKaufland()
     importAldiNord()
+    importEdeka()
 }
 
 setInterval(runMonitors, (5 * 60 * 1000));
