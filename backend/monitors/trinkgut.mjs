@@ -38,8 +38,8 @@ export async function importTrinkgut() {
     let startDateSplit = regexResult[1].split(".")
     let endDateSplit = regexResult[2].split(".")
 
-    let startDate = new Date(startDateSplit[2],startDateSplit[1],startDateSplit[0])
-    let endDate = new Date(endDateSplit[2],endDateSplit[1],endDateSplit[0])
+    let startDate = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0])
+    let endDate = new Date(endDateSplit[2], endDateSplit[1], endDateSplit[0])
 
     offers.forEach(async (offer) => {
         const fetchOfferRaw = await (await fetch(offer)).text()
@@ -100,6 +100,7 @@ function traverseTreeRecurse(tree, offerList) {
         if (Object.keys(tree).includes("@_href")) {
             if (tree["@_href"].includes("aktuelle-angebote")) {
                 offerList.push(tree["@_href"])
+                return
             }
         }
 
