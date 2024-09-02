@@ -86,8 +86,15 @@ app.post("/insertStore", async (req, res) => {
     }
 })
 
-app.get("/rows", async (req, res) => {
-    res.send(await Offer.find())
+app.get("/api/rows", async (req, res) => {
+
+    let from = (new Date(Date.now())).setHours(0,0,0,0)
+
+    if(req.query.from !== undefined) {
+        from = new Date(req.query.from)
+    }
+
+    res.send(await Offer.find({ startDateTime: { $gte: from } }))
 })
 
 app.get("/lastFetch", async (req, res) => {

@@ -25,7 +25,7 @@ export class OffersTableComponent implements OnInit {
   dataFetched: any;
   _filter: string = "";
 
-  url = "http://localhost:3000/rows"
+  url = "/api/rows"
 
   ngOnInit(): void {
     this.fetchData()
