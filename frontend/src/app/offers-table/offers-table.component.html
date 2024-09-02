@@ -1,46 +1,34 @@
-<div class="container-fluid">
-    <input type="text" [(ngModel)]="filter">
+<input type="text" [(ngModel)]="filter">
 
-    <div class="row p-2">
-      <div class="col-6 mx-auto">
-        <table class="table table-bordered table-sm">
-          <thead>
-            <tr>
-              <th>product</th>
-              <th>seller</th>
-              <th>price</th>
-              <th>startDateTime</th>
-              <th>endDateTime</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of dataTable; let i=index">
-              <td>
-                <input type="text" class="form-control form-control-sm" id="id-{{i}}" name="id-{{i}}"
-                  [(ngModel)]="item.product" (ngModelChange)="onChange($event)">
-              </td>
-              <td>
-                <input type="text" class="form-control form-control-sm" id="title-{{i}}" name="title-{{i}}"
-                  [(ngModel)]="item.seller" (ngModelChange)="onChange($event)">
-              </td>
-              <td>
-                <input type="text" class="form-control form-control-sm" id="title-{{i}}" name="title-{{i}}"
-                  [(ngModel)]="item.price" (ngModelChange)="onChange($event)">
-              </td>
-              <td>
-                <input type="text" class="form-control form-control-sm" id="title-{{i}}" name="title-{{i}}"
-                  [ngModel]="item.startDateTime | date: 'dd-MM-yyyy'" (ngModelChange)="onChange($event)">
-              </td>
-              <td>
-                <input type="text" class="form-control form-control-sm" id="title-{{i}}" name="title-{{i}}"
-                  [ngModel]="item.endDateTime | date: 'dd-MM-yyyy'" (ngModelChange)="onChange($event)">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  
-  </div>
+<table mat-table [dataSource]="dataTable" class="mat-elevation-z8">
+  <!-- Position Column -->
+  <ng-container matColumnDef="product">
+    <th mat-header-cell *matHeaderCellDef>Product</th>
+    <td mat-cell *matCellDef="let element">{{element.product}}</td>
+  </ng-container>
 
-  <router-outlet></router-outlet>
+  <ng-container matColumnDef="seller">
+    <th mat-header-cell *matHeaderCellDef>Seller</th>
+    <td mat-cell *matCellDef="let element">{{element.seller}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>Price</th>
+    <td mat-cell *matCellDef="let element">{{element.price}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="startDateTime">
+    <th mat-header-cell *matHeaderCellDef>Date From</th>
+    <td mat-cell *matCellDef="let element">{{element.startDateTime}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="endDateTime">
+    <th mat-header-cell *matHeaderCellDef>Date To</th>
+    <td mat-cell *matCellDef="let element">{{element.endDateTime}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<router-outlet></router-outlet>

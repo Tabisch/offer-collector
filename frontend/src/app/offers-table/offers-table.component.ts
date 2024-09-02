@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {MatTableModule} from '@angular/material/table';
 
 @Component({
   standalone: true,
@@ -9,6 +10,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     RouterModule,
+    MatTableModule,
   ],
   selector: 'app-root',
   templateUrl: './offers-table.component.html',
@@ -21,9 +23,11 @@ export class OffersTableComponent implements OnInit {
   }
 
   title = 'offer-table';
-  dataTable: any;
+  dataTable: any[] = ["product"];
   dataFetched: any;
   _filter: string = "";
+
+  displayedColumns: string[] = ['product', 'seller', 'price', 'startDateTime', 'endDateTime'];
 
   url = "/api/rows"
 
