@@ -36,11 +36,13 @@ export async function importLidl() {
 
         let dateRegex = regex.exec(offer["stockAvailability"]["badgeInfo"]["badges"][0]["text"])
 
-        //console.log(dateRegex)
+        let start = new Date(now.getFullYear(), dateRegex[2] -1 , dateRegex[1])
+        let end = new Date(now.getFullYear(), dateRegex[4] -1 , dateRegex[3])
 
-        let start = new Date(now.getFullYear(), dateRegex[2] , dateRegex[1])
-        let end = new Date(now.getFullYear(), dateRegex[4] , dateRegex[3])
-        //console.log(start + " - " + end)
+        // if(offer["fullTitle"] === "Volvic Touch & Tee") {
+        //     console.log(dateRegex)
+        //     console.log(start + " - " + end)
+        // }
 
         try {
             fetch("http://localhost:3000/insertData", {
