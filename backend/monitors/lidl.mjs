@@ -1,14 +1,11 @@
 import { XMLParser } from "fast-xml-parser";
+import { insertOffer, setLastFetched } from "../util/database.mjs";
+import { allowedToFetch } from "../util/dates.mjs";
 
 export async function importLidl() {
     const monitorName = "lidl"
 
-    const offSet = 24 * 60 * 60 * 1000
-    const timeNow = new Date()
-    const lastfetched = new Date((await (await fetch(`http://localhost:3000/lastFetch?seller=${monitorName}`)).json())["fetchTime"])
-
-    if (timeNow - lastfetched < offSet) {
-        console.log(`${monitorName} - abort Update`)
+    if(!await allowedToFetch(monitorName)) {
         return
     }
 
@@ -44,25 +41,16 @@ export async function importLidl() {
         //     console.log(start + " - " + end)
         // }
 
-        try {
-            fetch("http://localhost:3000/insertData", {
-                method: "post",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    product: offer["fullTitle"],
-                    price: offer["price"]["price"],
-                    seller: "lidl",
-                    startDateTime: start,
-                    endDateTime: end
-                })
-            })
-        } catch (error) {
-
-        }
+        insertOffer({
+            product: offer["fullTitle"],
+            price: offer["price"]["price"],
+            seller: "lidl",
+            startDateTime: start,
+            endDateTime: end
+        })
     })
+
+    setLastFetched(monitorName)
 }
 
 function traverseTree(tree) {

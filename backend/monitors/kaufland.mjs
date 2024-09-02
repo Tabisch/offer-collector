@@ -1,15 +1,12 @@
 import { XMLParser } from "fast-xml-parser";
 import { version } from "mongoose";
+import { allowedToFetch } from "../util/dates.mjs";
+import { insertOffer, setLastFetched } from "../util/database.mjs";
 
 export async function importKaufland() {
     const monitorName = "kaufland"
 
-    const offSet = 1 * 60 * 60 * 1000
-    const timeNow = new Date()
-    const lastfetched = new Date((await (await fetch(`http://localhost:3000/lastFetch?seller=${monitorName}`)).json())["fetchTime"])
-
-    if (timeNow - lastfetched < offSet) {
-        console.log(`${monitorName} - abort Update`)
+    if(!await allowedToFetch(monitorName)) {
         return
     }
 
@@ -44,25 +41,16 @@ export async function importKaufland() {
             return
         }
 
-        try {
-            fetch("http://localhost:3000/insertData", {
-                method: "post",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    product: `${offer["title"]} ${offer["subtitle"]}`,
-                    price: offer["price"],
-                    seller: "kaufland",
-                    startDateTime: Date.parse(offer["dateFrom"]),
-                    endDateTime: Date.parse(offer["dateTo"])
-                })
-            })
-        } catch (error) {
-
-        }
+        insertOffer({
+            product: `${offer["title"]} ${offer["subtitle"]}`,
+            price: offer["price"],
+            seller: "kaufland",
+            startDateTime: Date.parse(offer["dateFrom"]),
+            endDateTime: Date.parse(offer["dateTo"])
+        })
     })
+
+    setLastFetched(monitorName)
 }
 
 function traverseTree(tree) {

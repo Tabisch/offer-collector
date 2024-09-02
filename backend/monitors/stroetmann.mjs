@@ -1,13 +1,11 @@
 import { json } from "express";
+import { allowedToFetch } from "../util/dates.mjs";
+import { insertOffer, setLastFetched } from "../util/database.mjs";
 
 export async function importStroetmann() {
+    const monitorName = "stroetmann"
 
-    const offSet = 24 * 60 * 60 * 1000
-    const timeNow = new Date()
-    const lastfetched = new Date((await (await fetch("http://localhost:3000/lastFetch?seller=stroetmann")).json())["fetchTime"])
-
-    if(timeNow - lastfetched < offSet){
-        console.log(`stroetmann - abort Update`)
+    if(!await allowedToFetch(monitorName)) {
         return
     }
 
@@ -19,20 +17,15 @@ export async function importStroetmann() {
         offers.forEach(async (offer) => {
             const product = `${offer['articles'][0]['text'][0]} ${offer['articles'][0]['text'][1]}`
 
-            await fetch("http://localhost:3000/insertData", {
-                method: "post",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                  },
-                body: JSON.stringify({
-                    product: `${product}`,
-                    seller: "stroetmann",
-                    price: `${offer["articles"][0]["brutto"]}`,
-                    startDateTime: `${collection["from"]}`,
-                    endDateTime: `${collection["until"]}`
-                })
+            insertOffer({
+                product: `${product}`,
+                seller: "stroetmann",
+                price: `${offer["articles"][0]["brutto"]}`,
+                startDateTime: `${collection["from"]}`,
+                endDateTime: `${collection["until"]}`
             })
         })
     });
+
+    setLastFetched(monitorName)
 }

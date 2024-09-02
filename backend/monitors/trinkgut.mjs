@@ -1,15 +1,11 @@
-import { json } from "express";
 import { XMLParser } from "fast-xml-parser";
+import { insertOffer, setLastFetched } from "../util/database.mjs";
+import { allowedToFetch } from "../util/dates.mjs";
 
 export async function importTrinkgut() {
     const monitorName = "trinkgut"
 
-    const offSet = 24 * 60 * 60 * 1000
-    const timeNow = new Date()
-    const lastfetched = new Date((await (await fetch(`http://localhost:3000/lastFetch?seller=${monitorName}`)).json())["fetchTime"])
-
-    if (timeNow - lastfetched < offSet) {
-        console.log(`${monitorName} - abort Update`)
+    if(!await allowedToFetch(monitorName)) {
         return
     }
 
@@ -58,25 +54,16 @@ export async function importTrinkgut() {
 
         let offerData = await traverseProductPageTree(offerPage)
 
-        try {
-            fetch("http://localhost:3000/insertData", {
-                method: "post",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    product: offerData["product"],
-                    price: offerData["price"],
-                    seller: "trinkgut",
-                    startDateTime: startDate,
-                    endDateTime: endDate
-                })
-            })
-        } catch (error) {
-
-        }
+        insertOffer({
+            product: offerData["product"],
+            price: offerData["price"],
+            seller: "trinkgut",
+            startDateTime: startDate,
+            endDateTime: endDate
+        })
     })
+
+    setLastFetched(monitorName)
 }
 
 function traverseTree(tree) {

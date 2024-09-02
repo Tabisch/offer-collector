@@ -1,3 +1,5 @@
+import LastFetch from "../schemas/lastFetchSchema.mjs";
+
 export function getWeek(date) {
     const weekDate = new Date(date.valueOf())
 
@@ -14,4 +16,22 @@ export function pennyDate(date, dayIndex) {
     internalDate = internalDate - internalDate.getDay() * 86400000 + (dayIndex + 1) * 86400000
 
     return new Date(internalDate)
+}
+
+export async function allowedToFetch(seller) {
+    const lastFetched = (await LastFetch.findOne({ seller: seller}, { _id: 0, __v: 0 }))
+
+    if (lastFetched === null) {
+        return true
+    }
+
+    const offSet = 86400000
+    const timeNow = new Date()
+
+    if (timeNow - lastFetched["fetchTime"] < offSet) {
+        console.log(`${seller} - abort Update`)
+        return false
+    }
+
+    return true
 }

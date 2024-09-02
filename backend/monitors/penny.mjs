@@ -1,16 +1,15 @@
 import { json } from "express";
-import { getWeek, pennyDate } from "../util/dates.mjs";
+import { allowedToFetch, getWeek, pennyDate } from "../util/dates.mjs";
+import { insertOffer, setLastFetched } from "../util/database.mjs";
 
 export async function importPenny() {
+    const monitorName = "penny"
 
-    const offSet = 24 * 60 * 60 * 1000
-    const timeNow = new Date()
-    const lastfetched = new Date((await (await fetch("http://localhost:3000/lastFetch?seller=penny")).json())["fetchTime"])
-
-    if (timeNow - lastfetched < offSet) {
-        console.log(`penny - abort Update`)
+    if(!await allowedToFetch(monitorName)) {
         return
     }
+
+    const timeNow = new Date()
 
     const calendarWeek = getWeek(timeNow)
     const currentYear = timeNow.getFullYear()
@@ -30,28 +29,29 @@ export async function importPenny() {
         Object.keys(categoryDateRanges).forEach((range) => {
             if (category["id"].includes(range)) {
                 category["offerTiles"].forEach((offer) => {
-                    try {
-                        fetch("http://localhost:3000/insertData", {
-                            method: "post",
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                product: offer["title"],
-                                price: Number(offer["price"].replace("*", "")),
-                                seller: "penny",
-                                startDateTime: categoryDateRanges[range]["startTime"],
-                                endDateTime: categoryDateRanges[range]["endTime"]
-                            })
-                        })
-                    } catch (error) {
 
+                    if(!Object.keys(offer).includes("price")) {
+                        return
                     }
+
+                    let price = offer["price"].replace("*", "").replace("je ", "").replace("–", "0")
+
+                    if(Number.isNaN(price)) {
+                        console.log("NaN")
+                        return
+                    }
+
+                    insertOffer({
+                        product: offer["title"],
+                        price: price,
+                        seller: "penny",
+                        startDateTime: categoryDateRanges[range]["startTime"],
+                        endDateTime: categoryDateRanges[range]["endTime"]
+                    })
                 })
             }
         })
     })
 
-    return
+    setLastFetched(monitorName)
 }

@@ -1,15 +1,11 @@
 import { XMLParser } from "fast-xml-parser";
+import { insertOffer, setLastFetched } from "../util/database.mjs";
+import { allowedToFetch } from "../util/dates.mjs";
 
 export async function importAldiNord() {
-
     const monitorName = "aldi-nord"
 
-    const offSet = 24 * 60 * 60 * 1000
-    const timeNow = new Date()
-    const lastfetched = new Date((await (await fetch(`http://localhost:3000/lastFetch?seller=${monitorName}`)).json())["fetchTime"])
-
-    if (timeNow - lastfetched < offSet) {
-        console.log(`${monitorName} - abort Update`)
+    if(!await allowedToFetch(monitorName)) {
         return
     }
 
@@ -66,21 +62,16 @@ export async function importAldiNord() {
             link = `https://www.aldi-nord.de${offerPage["div"]["div"]["a"]["@_href"]}`
         }
 
-        fetch("http://localhost:3000/insertData", {
-            method: "post",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                product: `${data["productInfo"]["brand"]} ${data["productInfo"]["productName"]}`,
-                price: data["productInfo"]["priceWithTax"],
-                seller: "aldi-nord",
-                startDateTime: datumStart,
-                endDateTime: datumEnd
-            })
+        insertOffer({
+            product: `${data["productInfo"]["brand"]} ${data["productInfo"]["productName"]}`,
+            price: data["productInfo"]["priceWithTax"],
+            seller: "aldi-nord",
+            startDateTime: datumStart,
+            endDateTime: datumEnd
         })
     })
+
+    setLastFetched(monitorName)
 }
 
 function traverseTree(tree) {

@@ -52,11 +52,6 @@ app.post("/insertData", async (req, res) => {
         return
     }
 
-    const filterLastFetch = { seller: req.body.seller }
-    const update = { fetchTime: (new Date).toISOString() }
-    
-    const lf = await LastFetch.findOneAndUpdate(filterLastFetch, update, options)
-
     res.sendStatus(200)
 })
 
