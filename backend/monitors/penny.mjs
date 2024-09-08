@@ -11,8 +11,16 @@ export async function importPenny() {
 
     const timeNow = new Date()
 
-    const calendarWeek = getWeek(timeNow)
+    let calendarWeek = getWeek(timeNow)
+
+    if(timeNow.getDay() === 0) {
+        calendarWeek = calendarWeek + 1
+    }
+
     const currentYear = timeNow.getFullYear()
+
+    // console.log(`${calendarWeek} - ${currentYear}`)
+    // console.log(`https://www.penny.de/.rest/offers/${currentYear}-${calendarWeek}`)
 
     const fetched = (await (await fetch(`https://www.penny.de/.rest/offers/${currentYear}-${calendarWeek}`)).json())[0]
 
@@ -31,6 +39,10 @@ export async function importPenny() {
                 category["offerTiles"].forEach((offer) => {
 
                     if(!Object.keys(offer).includes("price")) {
+                        return
+                    }
+
+                    if(offer["price"] === null) {
                         return
                     }
 
