@@ -5,6 +5,7 @@ import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetchSchema.mjs'
 import { runMonitors } from './runMonitors.mjs'
 import Store from './schemas/storeSchema.mjs'
+import { getRows, updateOfferCache } from './util/database.mjs'
 
 const app = express()
 const port = 3000
@@ -82,14 +83,7 @@ app.post("/insertStore", async (req, res) => {
 })
 
 app.get("/api/rows", async (req, res) => {
-
-    let from = (new Date(Date.now())).setHours(0,0,0,0)
-
-    if(req.query.from !== undefined) {
-        from = new Date(req.query.from)
-    }
-
-    res.send(await Offer.find({ startDateTime: { $gte: from } }))
+    res.send(await getRows())
 })
 
 app.get("/lastFetch", async (req, res) => {
@@ -114,3 +108,4 @@ app.listen(port, () => {
 })
 
 runMonitors()
+updateOfferCache()
