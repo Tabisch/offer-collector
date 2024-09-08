@@ -83,6 +83,7 @@ app.post("/insertStore", async (req, res) => {
 })
 
 app.get("/api/rows", async (req, res) => {
+    res.type('application/json')
     res.send(await getRows())
 })
 
