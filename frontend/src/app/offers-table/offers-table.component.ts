@@ -2,7 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table';
+import { MatLabel } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @Component({
   standalone: true,
@@ -11,6 +15,10 @@ import {MatTableModule} from '@angular/material/table';
     FormsModule,
     RouterModule,
     MatTableModule,
+    MatIconModule,
+    MatLabel,
+    MatInputModule,
+    MatFormFieldModule,
   ],
   selector: 'app-root',
   templateUrl: './offers-table.component.html',
@@ -27,7 +35,7 @@ export class OffersTableComponent implements OnInit {
   dataFetched: any;
   _filter: string = "";
 
-  displayedColumns: string[] = ['product', 'seller', 'price', 'startDateTime', 'endDateTime'];
+  displayedColumns: string[] = ['product', 'seller', 'price', 'startDateTime', 'endDateTime','website'];
 
   url = "/api/rows"
 
