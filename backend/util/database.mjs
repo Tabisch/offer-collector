@@ -13,7 +13,7 @@ setInterval (updateOfferCache, 300000)
 
 export async function updateOfferCache() {
     console.log("Updating Cache")
-    offerCache = JSON.stringify(await Offer.find({ startDateTime: { $gte: (new Date(Date.now())).setHours(0, 0, 0, 0) } }))
+    offerCache = JSON.stringify(await Offer.find({ endDateTime: { $gte: (new Date(Date.now())).setHours(0, 0, 0, 0) } }))
 }
 
 export async function insertOffer(offerData) {
@@ -25,8 +25,17 @@ export async function insertOffer(offerData) {
         endDateTime: offerData.endDateTime
     }
 
+    const insertOffer = {
+        product: offerData.product,
+        seller: offerData.seller,
+        price: offerData.price,
+        startDateTime: offerData.startDateTime,
+        endDateTime: offerData.endDateTime,
+        website: offerData.website
+    }
+
     try {
-        const of = await Offer.findOneAndUpdate(filterOffer, filterOffer, options)
+        const of = await Offer.findOneAndUpdate(filterOffer, insertOffer, options)
         await of.save()
     } catch (error) {
         console.log(`error import: ${offerData.product} - ${offerData.seller}`)

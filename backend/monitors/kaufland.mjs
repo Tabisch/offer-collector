@@ -31,6 +31,8 @@ export async function importKaufland() {
 
     let offersUnstructured = await traverseTree(jObj)
 
+    let currenWeekDates = offersUnstructured["props"]["weekData"]["currentWeekDates"]
+    
     let offersStructured = await traverseOffersTree(offersUnstructured)
 
     const regex = /\d\d\d\d-\d\d-\d\d/gm;
@@ -41,12 +43,26 @@ export async function importKaufland() {
             return
         }
 
+        if(offer["title"] === "KROMBACHER"){
+            console.log("KROMBACHER")
+        }
+
+        let website = ""
+
+        if(currenWeekDates.includes(offer["dateTo"])) {
+            website = `https://filiale.kaufland.de/angebote/uebersicht.html?kloffer-category=${offer["kloffer-category"]}&kloffer-articleID=${offer["klNr"]}`
+        }
+        else {
+            website = `https://filiale.kaufland.de/angebote/uebersicht.html?kloffer-category=${offer["kloffer-category"]}&kloffer-articleID=${offer["klNr"]}&kloffer-week=next`
+        }
+
         insertOffer({
             product: `${offer["title"]} ${offer["subtitle"]}`,
             price: offer["price"],
             seller: "kaufland",
             startDateTime: Date.parse(offer["dateFrom"]),
-            endDateTime: Date.parse(offer["dateTo"])
+            endDateTime: Date.parse(offer["dateTo"]),
+            website: website
         })
     })
 
@@ -102,9 +118,12 @@ function traverseOffersTreeRecurse(tree, offerList) {
     }
 
     if (typeof (tree) === "object") {
-        if (Object.keys(tree).includes("offers")) {
-            offerList.push(...(tree["offers"]))
-            return
+        if (Object.keys(tree).includes("offerCategoryId")) {
+            tree["offers"].forEach(element => {
+                element["kloffer-category"] = tree["name"]
+                offerList.push(element)
+                return
+            });
         }
 
         Object.keys(tree).forEach((key) => {

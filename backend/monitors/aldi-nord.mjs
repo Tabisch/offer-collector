@@ -67,7 +67,8 @@ export async function importAldiNord() {
             price: data["productInfo"]["priceWithTax"],
             seller: "aldi-nord",
             startDateTime: datumStart,
-            endDateTime: datumEnd
+            endDateTime: datumEnd,
+            website: link
         })
     })
 

@@ -26,6 +26,10 @@ const offerSchema = new Schema({
     type: Date,
     required: true
   } ,
+  website: {
+    type: String,
+    required: false
+  } ,
 });
 
 const Offer = model('Offer', offerSchema);
