@@ -6,6 +6,7 @@ import LastFetch from './schemas/lastFetchSchema.mjs'
 import { runMonitors } from './runMonitors.mjs'
 import Store from './schemas/storeSchema.mjs'
 import { getRows, updateOfferCache } from './util/database.mjs'
+import { __dirname, __filename } from './config.mjs';
 
 const app = express()
 const port = 3000
@@ -14,19 +15,29 @@ app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors())
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname) + "/static/index.html")
-})
+console.log(path.join(__dirname, 'static/'))
 
-app.get("/insertData", (req, res) => {
-    res.sendFile(path.join(__dirname) + "/static/insert.html")
-})
+app.use(express.static(path.join(__dirname, 'static/'),{extensions: ["js"]}))
+
+app.get('/', (req, res) => {
+    res.redirect('/frontend/')
+});
+
+app.get('/frontend/*', (req, res) => {
+    if(req.url.includes('.js')) {
+        let split = req.originalUrl.split('/')
+
+        res.sendFile(path.join(__dirname, `static/${split[split.length - 1]}`));
+        return
+    }
+    res.sendFile(path.join(__dirname, 'static/index.html'));
+});
 
 // app.get("/devDebug", async (req, res) => {
 //     res.send(await importAldiNord())
 // })
 
-app.post("/insertData", async (req, res) => {
+app.post("/api/insertData", async (req, res) => {
     //console.log(req.body.seller)
 
     const options = {
@@ -56,7 +67,7 @@ app.post("/insertData", async (req, res) => {
     res.sendStatus(200)
 })
 
-app.post("/insertStore", async (req, res) => {
+app.post("/api/insertStore", async (req, res) => {
     //console.log(req.body.seller)
 
     const options = {
@@ -87,7 +98,7 @@ app.get("/api/rows", async (req, res) => {
     res.send(await getRows())
 })
 
-app.get("/lastFetch", async (req, res) => {
+app.get("/api/lastFetch", async (req, res) => {
     const last = await LastFetch.findOne({ seller: req.query.seller }, { _id: 0, __v: 0 })
 
     if (last === null) {
@@ -100,12 +111,8 @@ app.get("/lastFetch", async (req, res) => {
     }
 })
 
-app.get("/overview", async (req, res) => {
-    res.sendFile(path.join(__dirname) + "/static/overview.html")
-})
-
 app.listen(port, () => {
-    console.log(`App listening on ${port}`)
+    console.log(`App listening on ${port} - ${new Date().toISOString()}`)
 })
 
 runMonitors()
