@@ -1,0 +1,14 @@
+services:
+  app:
+    image: tabisch/offer-collector:latest
+    ports:
+      - 8000:3000
+
+  db:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
