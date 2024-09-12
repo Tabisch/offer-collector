@@ -7,13 +7,13 @@ import { importAldiNord } from "./monitors/aldi-nord.mjs";
 import { importEdeka } from "./monitors/edeka.mjs";
 
 export async function runMonitors() {
-    importStroetmann()
-    importPenny()
-    importLidl()
-    importTrinkgut()
-    importKaufland()
-    importAldiNord()
-    importEdeka()
+    await importStroetmann()
+    await importPenny()
+    await importLidl()
+    await importTrinkgut()
+    await importKaufland()
+    await importAldiNord()
+    await importEdeka()
 }
 
 setInterval(runMonitors, (5 * 60 * 1000));
