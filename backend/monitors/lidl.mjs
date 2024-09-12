@@ -29,7 +29,11 @@ export async function importLidl() {
     let now = new Date()
 
     offers.forEach((offer) => {
-        //console.log(offer["fullTitle"])
+        if(offer["stockAvailability"]["badgeInfo"]["badges"] === null) {
+            //console.log(offer["fullTitle"])
+            //console.log(JSON.stringify(offer))
+            return
+        }
 
         let dateRegex = regex.exec(offer["stockAvailability"]["badgeInfo"]["badges"][0]["text"])
 
@@ -46,7 +50,8 @@ export async function importLidl() {
             price: offer["price"]["price"],
             seller: "lidl",
             startDateTime: start,
-            endDateTime: end
+            endDateTime: end,
+            website: `https://www.lidl.de${offer["canonicalPath"]}`
         })
     })
 
