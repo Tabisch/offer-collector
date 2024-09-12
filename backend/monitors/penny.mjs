@@ -58,7 +58,8 @@ export async function importPenny() {
                         price: price,
                         seller: "penny",
                         startDateTime: categoryDateRanges[range]["startTime"],
-                        endDateTime: categoryDateRanges[range]["endTime"]
+                        endDateTime: categoryDateRanges[range]["endTime"],
+                        website: `https://www.penny.de${offer["linkHref"]}`
                     })
                 })
             }
