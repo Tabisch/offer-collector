@@ -12,6 +12,16 @@
         }
       },
       {
+        "label": "Push Frontend to Dev-Server",
+        "type": "shell",
+        "command": "./angular_to_static.sh",
+        "group": "",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        }
+      },
+      {
         "label": "Run Frontend-Dev Server",
         "type": "shell",
         "command": "cd ./frontend && npm start",
