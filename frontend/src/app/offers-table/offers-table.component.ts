@@ -53,7 +53,9 @@ export class OffersTableComponent implements OnInit {
   }
 
   async filterData() {
-    this.dataTable = this.dataFetched.filter((offer: any) => (offer.seller.includes(this._filter) || offer.product.includes(this._filter)))
+    let filter = this._filter.toLocaleLowerCase()
+
+    this.dataTable = this.dataFetched.filter((offer: any) => (offer.seller.toLowerCase().includes(filter) || offer.product.toLowerCase().includes(filter)))
   }
 
   onChange(event:any) {
