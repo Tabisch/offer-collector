@@ -10,6 +10,7 @@ export async function importAldiNord() {
     }
 
     const fetchRaw = await (await fetch("https://www.aldi-nord.de/angebote.html")).text()
+    // const stores = await (await fetch("https://locator.uberall.com/api/storefinders/ALDINORDDE_UimhY3MWJaxhjK9QdZo3Qa4chq1MAu/locations/all?v=20230110&language=de&fieldMask=id&fieldMask=identifier&fieldMask=googlePlaceId&fieldMask=lat&fieldMask=lng&fieldMask=name&fieldMask=country&fieldMask=city&fieldMask=province&fieldMask=streetAndNumber&fieldMask=zip&fieldMask=businessId&fieldMask=addressExtra&")).json()
 
     let linkDays = ["so", "mo", "di", "mi", "do", "fr", "sa"]
 
@@ -48,9 +49,8 @@ export async function importAldiNord() {
 
         let data = JSON.parse(offerPage["div"]["@_data-article"])
 
-        let datumStart = new Date(data["productInfo"]["promotionDate"] + 2 * 60 * 60 * 1000)
-
-        let datumEnd = new Date(datumStart + (6-datumStart.getDay()) * 24 * 60 * 60 * 1000)
+        let datumStart = new Date((new Date(data["productInfo"]["promotionDate"])).getTime()  + 2 * 60 * 60 * 1000)
+        let datumEnd = new Date(datumStart.getTime() + (6-datumStart.getDay()) * 24 * 60 * 60 * 1000)
 
         let weekDay = linkDays[datumStart.getUTCDay()]
         let monthDay = `0${datumStart.getDate()}`.slice(-2)
