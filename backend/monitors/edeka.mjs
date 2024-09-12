@@ -9,7 +9,15 @@ export async function importEdeka() {
         return
     }
 
-    let offers = await (await fetch("https://www.edeka.de/api/offers?marketId=12541")).json()
+    let offers;
+
+    try {
+        offers = await (await fetch("https://www.edeka.de/api/offers?marketId=12541")).json()
+    } catch (error) {
+        console.log(`${monitorName} - fetch failed - skipped`)
+        return
+    }
+
     //let storesPagesCount = Math.ceil(((await (await fetch("https://www.edeka.de/api/marketsearch/markets")).json())["totalCount"] / 999))
 
     //Array.from(Array(storesPagesCount).keys()).forEach(async (number) => {
