@@ -5,7 +5,7 @@ import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetchSchema.mjs'
 import { runMonitors } from './runMonitors.mjs'
 import Store from './schemas/storeSchema.mjs'
-import { getRows, updateOfferCache } from './util/database.mjs'
+import { emptyDatabase, getRows, updateOfferCache } from './util/database.mjs'
 import { __dirname, __filename } from './config.mjs';
 
 const app = express()
@@ -36,6 +36,11 @@ app.get('/frontend/*', (req, res) => {
 // app.get("/devDebug", async (req, res) => {
 //     res.send(await importAldiNord())
 // })
+
+app.get("/api/emptyDatabase", async (req, res) => {
+    emptyDatabase()
+    res.send("okay")
+})
 
 app.post("/api/insertData", async (req, res) => {
     //console.log(req.body.seller)

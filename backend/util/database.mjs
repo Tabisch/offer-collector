@@ -11,7 +11,8 @@ let offerCache = {}
 
 export async function updateOfferCache() {
     console.log("Updating Cache")
-    offerCache = JSON.stringify(await Offer.find({ endDateTime: { $gte: (new Date(Date.now())).setHours(0, 0, 0, 0) } }))
+    //offerCache = JSON.stringify(await Offer.find({ endDateTime: { $gte: (new Date(Date.now())).setHours(0, 0, 0, 0) } }))
+    offerCache = JSON.stringify(await Offer.find({}))
 }
 
 export async function insertOffer(offerData) {
@@ -46,6 +47,14 @@ export async function setLastFetched(seller) {
     const update = { fetchTime: (new Date).toISOString() }
 
     const lf = await LastFetch.findOneAndUpdate(filterLastFetch, update, options)
+}
+
+export async function emptyDatabase() {
+    console.log("emptyDatabase")
+    await Offer.deleteMany({})
+    await LastFetch.deleteMany({})
+
+    updateOfferCache()
 }
 
 export async function getRows() {
