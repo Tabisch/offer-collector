@@ -1,3 +1,9 @@
 .filter-form-field {
-    width: 100%;
+    width: 90%;
   }
+
+.counter {
+  white-space: pre-line;
+  display: inline-flex;
+  float: right;
+}
