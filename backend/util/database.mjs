@@ -9,8 +9,6 @@ const options = {
 
 let offerCache = {}
 
-setInterval (updateOfferCache, 300000)
-
 export async function updateOfferCache() {
     console.log("Updating Cache")
     offerCache = JSON.stringify(await Offer.find({ endDateTime: { $gte: (new Date(Date.now())).setHours(0, 0, 0, 0) } }))
