@@ -29,7 +29,7 @@ export async function allowedToFetch(seller) {
     const timeNow = new Date()
 
     if (timeNow - lastFetched["fetchTime"] < offSet) {
-        console.log(`${seller} - abort Update`)
+        console.log(`${timeNow} - ${seller} - abort Update`)
         return false
     }
 
