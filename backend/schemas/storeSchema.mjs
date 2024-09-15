@@ -6,10 +6,6 @@ const connectionString = "mongodb://db/offers-collector";
 mongoose.connect(connectionString);
 
 const storeSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
   targetApiIdentifier: {
     type: String,
     required: true
@@ -18,6 +14,10 @@ const storeSchema = new Schema({
     type: String,
     required: true
   },
+  data: {
+    type: Schema.Types.Mixed,
+    required: true
+  }
 });
 
 const Store = model('Store', storeSchema);

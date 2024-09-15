@@ -1,5 +1,6 @@
 import Offer from '../schemas/offerSchema.mjs'
 import LastFetch from '../schemas/lastFetchSchema.mjs'
+import Store from '../schemas/storeSchema.mjs'
 
 const options = {
     upsert: true,
@@ -11,8 +12,8 @@ let offerCache = {}
 
 export async function updateOfferCache() {
     console.log("Updating Cache")
-    //offerCache = JSON.stringify(await Offer.find({ endDateTime: { $gte: (new Date(Date.now())).setHours(0, 0, 0, 0) } }))
-    offerCache = JSON.stringify(await Offer.find({}))
+    offerCache = JSON.stringify(await Offer.find({ endDateTime: { $gte: (new Date(Date.now())).setHours(0, 0, 0, 0) } }))
+    //offerCache = JSON.stringify(await Offer.find({}))
 }
 
 export async function insertOffer(offerData) {
@@ -38,6 +39,34 @@ export async function insertOffer(offerData) {
         await of.save()
     } catch (error) {
         console.log(`error import: ${offerData.product} - ${offerData.seller}`)
+        return
+    }
+}
+
+export async function insertStore(storeData) {
+    const options = {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true
+    }
+
+    const filterStore = {
+        group: storeData["group"],
+        targetApiIdentifier: storeData["targetApiIdentifier"],
+    }
+
+    const storeInsert = {
+        group: storeData["group"],
+        targetApiIdentifier: storeData["targetApiIdentifier"],
+        data: storeData["data"],
+    }
+
+    const st = await Store.findOneAndUpdate(filterStore, storeInsert, options)
+
+    try {
+        await st.save()
+    } catch (error) {
+        console.log(`error import: ${storeData["group"]} - ${storeData["targetApiIdentifier"]}`)
         return
     }
 }
