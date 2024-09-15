@@ -12,6 +12,7 @@
 				"dbaeumer.vscode-eslint",
 				"mongodb.mongodb-vscode",
                 "ms-azuretools.vscode-docker",
+                "Malo.copy-json-path",
 			]
         }
     },
