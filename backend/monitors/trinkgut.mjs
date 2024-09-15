@@ -1,15 +1,16 @@
 import { XMLParser } from "fast-xml-parser";
-import { insertOffer, setLastFetched } from "../util/database.mjs";
+import { insertOffer, insertStore, setLastFetched } from "../util/database.mjs";
 import { allowedToFetch } from "../util/dates.mjs";
 
 export async function importTrinkgut() {
     const monitorName = "trinkgut"
 
-    if(!await allowedToFetch(monitorName)) {
+    if (!await allowedToFetch(monitorName)) {
         return
     }
 
     const fetchRaw = await (await fetch("https://www.trinkgut.de/angebote/?market=722d7aab-9951-4d80-a52c-684479bf14c0")).text()
+    const storesRaw = await (await fetch("https://www.trinkgut.de/maerkte/?sword=99820")).text()
 
     const options = {
         ignoreAttributes: false,
@@ -23,6 +24,16 @@ export async function importTrinkgut() {
     const parser = new XMLParser(options);
     let jObj = await parser.parse(fetchRaw);
 
+    let storesParsed = await parser.parse(storesRaw)
+    let storesJson = JSON.parse(storesParsed.html.body.header.div.nav.div[1].form.div[2].div.nav.div.main.div.div.div.div.div.div.div.div.div[1].div[1].div.div.div[1].div.div.div[1].script["#text"])
+    storesJson.forEach((store) => {
+        insertStore({
+            group: "trinkgut",
+            targetApiIdentifier: store["id"],
+            data: store
+        })
+    })
+
     let offers = await traverseTree(jObj)
 
     let dateRangesFromText = await offers.shift()
@@ -34,8 +45,8 @@ export async function importTrinkgut() {
     let startDateSplit = regexResult[1].split(".")
     let endDateSplit = regexResult[2].split(".")
 
-    let startDate = new Date(startDateSplit[2], startDateSplit[1] -1 , startDateSplit[0])
-    let endDate = new Date(endDateSplit[2], endDateSplit[1] -1 , endDateSplit[0])
+    let startDate = new Date(startDateSplit[2], startDateSplit[1] - 1, startDateSplit[0])
+    let endDate = new Date(endDateSplit[2], endDateSplit[1] - 1, endDateSplit[0])
 
     offers.forEach(async (offer) => {
         const fetchOfferRaw = await (await fetch(offer)).text()
@@ -59,7 +70,8 @@ export async function importTrinkgut() {
             price: offerData["price"],
             seller: "trinkgut",
             startDateTime: startDate,
-            endDateTime: endDate
+            endDateTime: endDate,
+            website: offer
         })
     })
 
