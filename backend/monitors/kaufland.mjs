@@ -43,10 +43,6 @@ export async function importKaufland() {
             return
         }
 
-        if(offer["title"] === "KROMBACHER"){
-            console.log("KROMBACHER")
-        }
-
         let website = ""
 
         if(currenWeekDates.includes(offer["dateTo"])) {
