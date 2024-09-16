@@ -1,5 +1,4 @@
 import { XMLParser } from "fast-xml-parser";
-import { version } from "mongoose";
 import { allowedToFetch } from "../util/dates.mjs";
 import { insertOffer, setLastFetched } from "../util/database.mjs";
 

@@ -1,4 +1,3 @@
-import { json } from "express";
 import { allowedToFetch, getWeek } from "../util/dates.mjs";
 import { insertOffer, setLastFetched } from "../util/database.mjs";
 
