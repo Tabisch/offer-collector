@@ -9,9 +9,16 @@ export async function importEdekaStores() {
 
         result["markets"].forEach(async (store) => {
             insertStore({
+                name: store["name"],
+                zipCode: store["contact"]["address"]["city"]["zipCode"],
+                city: store["contact"]["address"]["city"]["name"],
+                street: store["contact"]["address"]["street"],
                 group: "edeka",
+                longitude: Number(store["coordinates"]["lon"]),
+                latitude: Number(store["coordinates"]["lat"]),
                 targetApiIdentifier: store["id"],
-                data: store
+                data: store,
+                website: store["url"]
             })
         })
     })

@@ -5,8 +5,10 @@ import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetchSchema.mjs'
 import { runMonitors } from './runMonitors.mjs'
 import Store from './schemas/storeSchema.mjs'
-import { emptyDatabase, getRows, updateOfferCache } from './util/database.mjs'
+import { emptyDatabase, getOffers, getStores } from './util/database.mjs'
 import { __dirname, __filename } from './config.mjs';
+import { runStoresImport } from './runStoresImport.mjs'
+import { importPennyStores } from './stores/penny-stores.mjs'
 
 const app = express()
 const port = 3000
@@ -33,9 +35,9 @@ app.get('/frontend/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'static/index.html'));
 });
 
-// app.get("/devDebug", async (req, res) => {
-//     res.send(await importAldiNord())
-// })
+app.get("/devDebug", async (req, res) => {
+    res.send(await importPennyStores())
+})
 
 app.get("/api/emptyDatabase", async (req, res) => {
     emptyDatabase()
@@ -100,7 +102,12 @@ app.post("/api/insertStore", async (req, res) => {
 
 app.get("/api/rows", async (req, res) => {
     res.type('application/json')
-    res.send(await getRows())
+    res.send(await getOffers())
+})
+
+app.get("/api/stores", async (req, res) => {
+    res.type('application/json')
+    res.send(await getStores())
 })
 
 app.get("/api/lastFetch", async (req, res) => {
@@ -120,4 +127,5 @@ app.listen(port, () => {
     console.log(`App listening on ${port} - ${new Date().toISOString()}`)
 })
 
-runMonitors()
+// runMonitors()
+runStoresImport()

@@ -17,11 +17,19 @@ export async function importTrinkgutStores() {
 
     let storesParsed = await parser.parse(storesRaw)
     let storesJson = JSON.parse(storesParsed.html.body.header.div.nav.div[1].form.div[2].div.nav.div.main.div.div.div.div.div.div.div.div.div[1].div[1].div.div.div[1].div.div.div[1].script["#text"])
+
     storesJson.forEach((store) => {
         insertStore({
+            name: store["name"],
+            zipCode: store["zipCode"],
+            city: store["city"],
+            street: store["street"],
             group: "trinkgut",
+            longitude: store["longitude"],
+            latitude: store["latitude"],
             targetApiIdentifier: store["id"],
-            data: store
+            data: store,
+            website: store["detailURL"]
         })
     })
 }

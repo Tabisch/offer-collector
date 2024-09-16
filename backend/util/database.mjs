@@ -56,9 +56,18 @@ export async function insertStore(storeData) {
     }
 
     const storeInsert = {
+        name: storeData["name"],
+        zipCode: storeData["zipCode"],
+        city: storeData["city"],
+        street: storeData["street"],
         group: storeData["group"],
+        location: {
+            type: 'Point',
+            coordinate: [storeData["longitude"], storeData["latitude"]]
+        },
         targetApiIdentifier: storeData["targetApiIdentifier"],
         data: storeData["data"],
+        website: storeData["website"]
     }
 
     const st = await Store.findOneAndUpdate(filterStore, storeInsert, options)
@@ -86,6 +95,10 @@ export async function emptyDatabase() {
     updateOfferCache()
 }
 
-export async function getRows() {
+export async function getOffers() {
     return offerCache
+}
+
+export async function getStores() {
+    return Store.find({}).select("-data")
 }
