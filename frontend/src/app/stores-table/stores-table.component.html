@@ -1,0 +1,61 @@
+<mat-form-field class="filter-form-field">
+    <mat-label>Name Filter</mat-label>
+    <input matInput type="text" [(ngModel)]="nameFilter">
+</mat-form-field>
+
+<mat-form-field class="filter-form-field">
+    <mat-label>Zip Filter</mat-label>
+    <input matInput type="text" [(ngModel)]="zipFilter">
+</mat-form-field>
+
+<pre class="counter">
+    Items {{dataTable.length}}
+    Items total {{dataFetched.length}}
+  </pre>
+
+<table mat-table [dataSource]="dataTable" class="mat-elevation-z8">
+    <!-- Position Column -->
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">{{element.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="group">
+        <th mat-header-cell *matHeaderCellDef>Group</th>
+        <td mat-cell *matCellDef="let element">{{element.group}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="zipCode">
+        <th mat-header-cell *matHeaderCellDef>Zip</th>
+        <td mat-cell *matCellDef="let element">{{element.zipCode}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef>City</th>
+        <td mat-cell *matCellDef="let element">{{element.city}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="street">
+        <th mat-header-cell *matHeaderCellDef>Street</th>
+        <td mat-cell *matCellDef="let element">{{element.street}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="selected">
+        <th mat-header-cell *matHeaderCellDef>Selected</th>
+        <td mat-cell *matCellDef="let element">{{element.selected}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="website">
+        <th mat-header-cell *matHeaderCellDef>Website</th>
+        <td mat-cell *matCellDef="let element">
+            @if(element.website) {
+            <a href={{element.website}} target="_blank">Website</a>
+            }
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<router-outlet></router-outlet>
