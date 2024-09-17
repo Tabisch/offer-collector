@@ -2,14 +2,16 @@ import { XMLParser } from "fast-xml-parser";
 import { insertOffer, setLastFetched } from "../util/database.mjs";
 import { allowedToFetch } from "../util/dates.mjs";
 
-export async function importTrinkgut() {
-    const monitorName = "trinkgut"
+export async function importTrinkgut(storeData) {
+    const monitorName = `${storeData.group} - ${storeData.targetApiIdentifier}`
 
     if (!await allowedToFetch(monitorName)) {
         return
     }
 
-    const fetchRaw = await (await fetch("https://www.trinkgut.de/angebote/?market=722d7aab-9951-4d80-a52c-684479bf14c0")).text()
+    console.log(`Importing ${monitorName}`)
+
+    const fetchRaw = await (await fetch(`https://www.trinkgut.de/angebote/?market=${storeData.targetApiIdentifier}`)).text()
 
     const options = {
         ignoreAttributes: false,
@@ -57,7 +59,7 @@ export async function importTrinkgut() {
         insertOffer({
             product: offerData["product"],
             price: offerData["price"],
-            seller: "trinkgut",
+            seller: `trinkgut ${storeData.name} `,
             startDateTime: startDate,
             endDateTime: endDate,
             website: offer

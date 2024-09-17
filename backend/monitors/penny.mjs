@@ -1,12 +1,14 @@
 import { allowedToFetch, getWeek, pennyDate } from "../util/dates.mjs";
 import { insertOffer, setLastFetched } from "../util/database.mjs";
 
-export async function importPenny() {
-    const monitorName = "penny"
+export async function importPenny(storeData) {
+    const monitorName = `${storeData.group} - ${storeData.data.sellingRegion}`
 
-    if(!await allowedToFetch(monitorName)) {
+    if (!await allowedToFetch(monitorName)) {
         return
     }
+
+    console.log(`Importing ${monitorName}`)
 
     const timeNow = new Date()
 
@@ -21,7 +23,7 @@ export async function importPenny() {
     // console.log(`${calendarWeek} - ${currentYear}`)
     // console.log(`https://www.penny.de/.rest/offers/${currentYear}-${calendarWeek}`)
 
-    const fetched = (await (await fetch(`https://www.penny.de/.rest/offers/${currentYear}-${calendarWeek}`)).json())[0]
+    const fetched = (await (await fetch(`https://www.penny.de/.rest/offers/${currentYear}-${calendarWeek}?weekRegion=${storeData.data.sellingRegion}`)).json())[0]
 
     let categoryDateRanges = {}
 
@@ -55,7 +57,7 @@ export async function importPenny() {
                     insertOffer({
                         product: offer["title"],
                         price: price,
-                        seller: "penny",
+                        seller: storeData.data.sellingRegion,
                         startDateTime: categoryDateRanges[range]["startTime"],
                         endDateTime: categoryDateRanges[range]["endTime"],
                         website: `https://www.penny.de${offer["linkHref"]}`

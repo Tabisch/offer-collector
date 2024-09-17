@@ -9,6 +9,8 @@ export async function importAldiNord() {
         return
     }
 
+    console.log(`Importing ${monitorName}`)
+
     const fetchRaw = await (await fetch("https://www.aldi-nord.de/angebote.html")).text()
 
     let linkDays = ["so", "mo", "di", "mi", "do", "fr", "sa"]

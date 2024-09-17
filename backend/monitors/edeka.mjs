@@ -2,17 +2,19 @@ import Store from "../schemas/storeSchema.mjs"
 import { insertOffer, setLastFetched } from "../util/database.mjs"
 import { allowedToFetch } from "../util/dates.mjs"
 
-export async function importEdeka() {
-    const monitorName = "edeka"
+export async function importEdeka(storeData) {
+    const monitorName = `${storeData.group} - ${storeData.targetApiIdentifier}`
 
     if (!await allowedToFetch(monitorName)) {
         return
     }
 
+    console.log(`Importing ${monitorName}`)
+
     let offers;
 
     try {
-        offers = await (await fetch("https://www.edeka.de/api/offers?marketId=12541")).json()
+        offers = await (await fetch(`https://www.edeka.de/api/offers?marketId=${storeData.targetApiIdentifier}`)).json()
     } catch (error) {
         console.log(`${monitorName} - fetch failed - skipped`)
         return
@@ -25,7 +27,7 @@ export async function importEdeka() {
         insertOffer({
             product: offer["title"],
             price: offer["price"]["rawValue"],
-            seller: "edeka",
+            seller: storeData.name,
             startDateTime: startDateTime,
             endDateTime: endDateTime
         })

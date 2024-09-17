@@ -6,15 +6,56 @@ import { importKaufland } from "./monitors/kaufland.mjs";
 import { importAldiNord } from "./monitors/aldi-nord.mjs";
 import { importEdeka } from "./monitors/edeka.mjs";
 import { updateOfferCache } from "./util/database.mjs";
+import Store from "./schemas/storeSchema.mjs";
 
 export async function runMonitors() {
-    await importStroetmann()
-    await importPenny()
+    Store.find({
+        selected: true,
+        group: 'stroetmann'
+    }).then((result => {
+        result.forEach((storeData) => {
+            importStroetmann()
+        })
+    }))
+
+    Store.find({
+        selected: true,
+        group: 'edeka'
+    }).then((result => {
+        result.forEach((storeData) => {
+            importEdeka(storeData)
+        })
+    }))
+
+    Store.find({
+        selected: true,
+        group: 'penny'
+    }).then((result => {
+        result.forEach((storeData) => {
+            importPenny(storeData)
+        })
+    }))
+
+    Store.find({
+        selected: true,
+        group: 'aldi-nord'
+    }).then((result => {
+        result.forEach((storeData) => {
+            importAldiNord()
+        })
+    }))
+
+    Store.find({
+        selected: true,
+        group: 'trinkgut'
+    }).then((result => {
+        result.forEach((storeData) => {
+            importTrinkgut(storeData)
+        })
+    }))
+
     await importLidl()
-    await importTrinkgut()
     await importKaufland()
-    await importAldiNord()
-    await importEdeka()
 
     updateOfferCache()
 }
