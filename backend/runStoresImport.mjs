@@ -1,6 +1,7 @@
 import { importAldiNordStores } from "./stores/aldi-nord-stores.mjs";
 import { importEdekaStores } from "./stores/edeka-stores.mjs";
 import { importPennyStores } from "./stores/penny-stores.mjs";
+import { importStroetmannStores } from "./stores/stroetmann-stores.mjs";
 import { importTrinkgutStores } from "./stores/trinkgut-stores.mjs";
 
 export async function runStoresImport() {
@@ -8,4 +9,5 @@ export async function runStoresImport() {
     importEdekaStores()
     importTrinkgutStores()
     importPennyStores()
+    importStroetmannStores()
 }
