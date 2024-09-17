@@ -11,11 +11,12 @@ export async function importStroetmannStores() {
         latitude: 51.92303270563306,
         targetApiIdentifier: 0,
         data: {},
+        website: "https://grossmarkt.stroetmann.de/ueber-uns/standorte/muenster"
     })
 
     insertStore({
         name: "Großmarkt Gronau",
-        zipCode: 48163,
+        zipCode: 48599,
         city: "Gronau",
         street: "Borgwardstraße 4",
         group: "stroetmann",
@@ -23,5 +24,6 @@ export async function importStroetmannStores() {
         latitude: 52.2023635806492,
         targetApiIdentifier: 1,
         data: {},
+        website: "https://grossmarkt.stroetmann.de/ueber-uns/standorte/gronau"
     })
 }
