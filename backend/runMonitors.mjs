@@ -54,6 +54,7 @@ export async function runMonitors() {
         })
     }))
 
+    // TODO make Lidl and Kaufland optional when stores implemented
     await importLidl()
     await importKaufland()
 
