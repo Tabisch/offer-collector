@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-stores-table',
@@ -20,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatLabel,
     MatInputModule,
     MatFormFieldModule,
+    MatCheckboxModule,
   ],
   templateUrl: './stores-table.component.html',
   styleUrl: './stores-table.component.css'
@@ -62,10 +64,26 @@ export class StoresTableComponent {
   async filterData() {
     let filter = this._namefilter.toLocaleLowerCase()
 
-    this.dataTable = this.dataFetched.filter((offer: any) => (offer.name.toLowerCase().includes(filter)) && (offer.zipCode.includes(this._zip)))
+    this.dataTable = this.dataFetched.filter((offer: any) => ((offer.name.toLowerCase().includes(filter)) && (offer.zipCode.includes(this._zip))))
   }
 
   onChange(event: any) {
     console.log('onChange:' + JSON.stringify(event));
+  }
+
+  update(checked: boolean, element: any) {
+    console.log(`${checked} - ${element.name}`)
+
+    fetch("/api/setStoreSelectedState", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        group: element.group,
+        targetApiIdentifier: element.targetApiIdentifier,
+        selected: checked
+      })
+    })
   }
 }

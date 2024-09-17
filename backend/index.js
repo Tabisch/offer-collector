@@ -5,7 +5,7 @@ import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetchSchema.mjs'
 import { runMonitors } from './runMonitors.mjs'
 import Store from './schemas/storeSchema.mjs'
-import { emptyDatabase, getOffers, getStores } from './util/database.mjs'
+import { emptyDatabase, getOffers, getStores, setStoreSelectedState } from './util/database.mjs'
 import { __dirname, __filename } from './config.mjs';
 import { runStoresImport } from './runStoresImport.mjs'
 import { importPennyStores } from './stores/penny-stores.mjs'
@@ -110,6 +110,16 @@ app.get("/api/stores", async (req, res) => {
     res.send(await getStores())
 })
 
+app.post("/api/setStoreSelectedState", async (req, res) => {
+    setStoreSelectedState({
+        group: req.body.group,
+        targetApiIdentifier: req.body.targetApiIdentifier,
+        selected: req.body.selected
+    })
+
+    res.sendStatus(200)
+})
+
 app.get("/api/lastFetch", async (req, res) => {
     const last = await LastFetch.findOne({ seller: req.query.seller }, { _id: 0, __v: 0 })
 
@@ -127,5 +137,5 @@ app.listen(port, () => {
     console.log(`App listening on ${port} - ${new Date().toISOString()}`)
 })
 
-// runMonitors()
-runStoresImport()
+//runStoresImport()
+runMonitors()

@@ -80,6 +80,30 @@ export async function insertStore(storeData) {
     }
 }
 
+export async function setStoreSelectedState(data) {
+console.log(data)
+
+    const options = {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true
+    }
+
+    const filterStore = {
+        group: data["group"],
+        targetApiIdentifier: data["targetApiIdentifier"],
+    }
+
+    const st = await Store.findOneAndUpdate(filterStore, {selected: data["selected"]}, options)
+
+    try {
+        await st.save()
+    } catch (error) {
+        console.log(`error import: ${data["group"]} - ${data["targetApiIdentifier"]}`)
+        return
+    }
+}
+
 export async function setLastFetched(seller) {
     const filterLastFetch = { seller: seller }
     const update = { fetchTime: (new Date).toISOString() }
