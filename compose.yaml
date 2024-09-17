@@ -1,8 +1,9 @@
 services:
   app:
     image: tabisch/offer-collector:latest
+    restart: unless-stopped
     ports:
-      - 8000:3000
+      - 3000:3000
 
   db:
     image: mongo:latest
