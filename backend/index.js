@@ -39,9 +39,9 @@ app.get("/devDebug", async (req, res) => {
     res.send(await importPennyStores())
 })
 
-app.get("/api/emptyDatabase", async (req, res) => {
+app.get("/api/resetOffers", async (req, res) => {
     emptyDatabase()
-    res.send("okay")
+    res.redirect("/frontend/offer-table")
 })
 
 app.post("/api/insertData", async (req, res) => {
@@ -137,5 +137,5 @@ app.listen(port, () => {
     console.log(`App listening on ${port} - ${new Date().toISOString()}`)
 })
 
-//runStoresImport()
+runStoresImport()
 runMonitors()
