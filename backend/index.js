@@ -5,10 +5,9 @@ import Offer from './schemas/offerSchema.mjs'
 import LastFetch from './schemas/lastFetchSchema.mjs'
 import { runMonitors } from './runMonitors.mjs'
 import Store from './schemas/storeSchema.mjs'
-import { emptyDatabase, getOffers, getStores, setStoreSelectedState } from './util/database.mjs'
+import { emptyOffers, emptyStores, getOffers, getStores, setStoreSelectedState } from './util/database.mjs'
 import { __dirname, __filename } from './config.mjs';
 import { runStoresImport } from './runStoresImport.mjs'
-import { importPennyStores } from './stores/penny-stores.mjs'
 
 const app = express()
 const port = 3000
@@ -35,13 +34,18 @@ app.get('/frontend/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'static/index.html'));
 });
 
-app.get("/devDebug", async (req, res) => {
-    res.send(await importPennyStores())
-})
+// app.get("/devDebug", async (req, res) => {
+//     res.send(await importPennyStores())
+// })
 
 app.get("/api/resetOffers", async (req, res) => {
-    emptyDatabase()
+    emptyOffers()
     res.redirect("/frontend/offer-table")
+})
+
+app.get("/api/resetStores", async (req, res) => {
+    emptyStores()
+    res.redirect("/frontend/stores-table")
 })
 
 app.post("/api/insertData", async (req, res) => {

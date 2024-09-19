@@ -1,6 +1,8 @@
 import Offer from '../schemas/offerSchema.mjs'
 import LastFetch from '../schemas/lastFetchSchema.mjs'
 import Store from '../schemas/storeSchema.mjs'
+import { runStoresImport } from '../runStoresImport.mjs'
+import { runMonitors } from '../runMonitors.mjs'
 
 const options = {
     upsert: true,
@@ -111,12 +113,19 @@ export async function setLastFetched(seller) {
     const lf = await LastFetch.findOneAndUpdate(filterLastFetch, update, options)
 }
 
-export async function emptyDatabase() {
-    console.log("emptyDatabase")
+export async function emptyOffers() {
+    console.log("emptyOffers")
     await Offer.deleteMany({})
     await LastFetch.deleteMany({})
 
-    updateOfferCache()
+    runMonitors()
+}
+
+export async function emptyStores() {
+    console.log("emptyStores")
+    await Store.deleteMany({})
+
+    runStoresImport()
 }
 
 export async function getOffers() {
