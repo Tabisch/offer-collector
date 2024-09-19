@@ -63,7 +63,7 @@ export async function insertStore(storeData) {
         group: storeData["group"],
         location: {
             type: 'Point',
-            coordinate: [storeData["longitude"], storeData["latitude"]]
+            coordinates: [storeData["longitude"], storeData["latitude"]]
         },
         targetApiIdentifier: storeData["targetApiIdentifier"],
         data: storeData["data"],
@@ -123,6 +123,20 @@ export async function getOffers() {
     return offerCache
 }
 
-export async function getStores() {
-    return Store.find({}).select("-data")
+export async function getStores(latitude, longitude, radius) {
+    if(latitude && longitude && radius) {
+        return Store.find({
+            location :{
+                $near: {
+                    $maxDistance: radius,
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [longitude, latitude]
+                    }
+                }
+            }
+        }).select("-data")
+    } else {
+        return Store.find({}).select("-data")
+    }
 }

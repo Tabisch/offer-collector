@@ -106,8 +106,12 @@ app.get("/api/rows", async (req, res) => {
 })
 
 app.get("/api/stores", async (req, res) => {
+    let latitude = Number(req.query.latitude)
+    let longitude = Number(req.query.longitude)
+    let radius = Number(req.query.radius)
+
     res.type('application/json')
-    res.send(await getStores())
+    res.send(await getStores(latitude, longitude, radius))
 })
 
 app.post("/api/setStoreSelectedState", async (req, res) => {

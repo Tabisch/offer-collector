@@ -7,7 +7,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-stores-table',
@@ -22,6 +24,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatInputModule,
     MatFormFieldModule,
     MatCheckboxModule,
+    MatButtonModule,
   ],
   templateUrl: './stores-table.component.html',
   styleUrl: './stores-table.component.css'
@@ -34,30 +37,37 @@ export class StoresTableComponent {
 
   @Input() set zipFilter(val: string) {
     this._zip = val
-    console.log(val)
     this.filterData()
   }
 
   title = 'stores-table';
-  dataTable: any[] = ["product"];
+  dataTable: any[];
   dataFetched: any;
   _namefilter: string = "";
-  _zip = ""
+  _zip = "";
+  latitude = 0;
+  longitude = 0;
+  radius = 5000;
 
   displayedColumns: string[] = ['name', 'group', 'zipCode', 'city', 'street', 'website', 'selected'];
 
   url = "/api/stores"
 
   ngOnInit(): void {
-    this.fetchData()
+    this.getPosition().subscribe(pos => {
+      console.log(pos);
+      this.latitude = pos.coords.latitude
+      this.longitude = pos.coords.longitude
+    });
   }
 
   constructor() {
+    this.dataFetched = [];
     this.dataTable = [];
   }
 
   async fetchData() {
-    this.dataFetched = await (await fetch(this.url)).json()
+    this.dataFetched = await (await fetch(`${this.url}?latitude=${this.latitude}&longitude=${this.longitude}&radius=${this.radius}`)).json()
     this.dataTable = this.dataFetched
   }
 
@@ -85,5 +95,15 @@ export class StoresTableComponent {
         selected: checked
       })
     })
+  }
+
+  getPosition(): Observable<any> {
+    return Observable.create((observer: any) => {
+      window.navigator.geolocation.getCurrentPosition(position => {
+        observer.next(position);
+        observer.complete();
+      },
+        error => observer.error(error));
+    });
   }
 }

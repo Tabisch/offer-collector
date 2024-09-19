@@ -28,7 +28,10 @@ const storeSchema = new Schema({
   },
   location: {
     type: { type: String, default: 'Point' },
-    coordinate: { type: [Number], default: [0, 0] }
+    coordinates: { 
+      type: [Number],
+      default: [0, 0] 
+    }
   },
   targetApiIdentifier: {
     type: String,
@@ -48,6 +51,8 @@ const storeSchema = new Schema({
     required: false
   },
 });
+
+storeSchema.index({ "location": "2dsphere" });
 
 const Store = model('Store', storeSchema);
 
