@@ -9,7 +9,7 @@ import { updateOfferCache } from "./util/database.mjs";
 import Store from "./schemas/storeSchema.mjs";
 
 export async function runMonitors() {
-    Store.find({
+    await Store.find({
         selected: true,
         group: 'stroetmann'
     }).then((result => {
@@ -18,7 +18,7 @@ export async function runMonitors() {
         })
     }))
 
-    Store.find({
+    await Store.find({
         selected: true,
         group: 'edeka'
     }).then((result => {
@@ -27,7 +27,7 @@ export async function runMonitors() {
         })
     }))
 
-    Store.find({
+    await Store.find({
         selected: true,
         group: 'penny'
     }).then((result => {
@@ -36,7 +36,7 @@ export async function runMonitors() {
         })
     }))
 
-    Store.find({
+    await Store.find({
         selected: true,
         group: 'aldi-nord'
     }).then((result => {
@@ -45,7 +45,7 @@ export async function runMonitors() {
         })
     }))
 
-    Store.find({
+    await Store.find({
         selected: true,
         group: 'trinkgut'
     }).then((result => {
@@ -54,9 +54,17 @@ export async function runMonitors() {
         })
     }))
 
+    await Store.find({
+        selected: true,
+        group: 'kaufland'
+    }).then((result => {
+        result.forEach((storeData) => {
+            importKaufland()
+        })
+    }))
+
     // TODO make Lidl and Kaufland optional when stores implemented
-    await importLidl()
-    await importKaufland()
+    // await importLidl()
 
     updateOfferCache()
 }
