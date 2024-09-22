@@ -106,9 +106,12 @@ console.log(data)
     }
 }
 
-export async function setLastFetched(seller) {
-    const filterLastFetch = { seller: seller }
-    const update = { fetchTime: (new Date).toISOString() }
+export async function setLastFetched(importer, type = "offer") {
+    const filterLastFetch = { importer: importer }
+    const update = { 
+        fetchTime: (new Date).toISOString(),
+        type: type
+    }
 
     const lf = await LastFetch.findOneAndUpdate(filterLastFetch, update, options)
 }
@@ -116,14 +119,15 @@ export async function setLastFetched(seller) {
 export async function emptyOffers() {
     console.log("emptyOffers")
     await Offer.deleteMany({})
-    await LastFetch.deleteMany({})
+    await LastFetch.deleteMany({ type: "offers"})
 
-    runMonitors()
+    await runMonitors()
 }
 
 export async function emptyStores() {
     console.log("emptyStores")
     await Store.deleteMany({})
+    await LastFetch.deleteMany({ type: "Stores"})
 
     runStoresImport()
 }

@@ -18,8 +18,8 @@ export function pennyDate(date, dayIndex) {
     return new Date(internalDate)
 }
 
-export async function allowedToFetch(seller) {
-    const lastFetched = (await LastFetch.findOne({ seller: seller}, { _id: 0, __v: 0 }))
+export async function allowedToFetch(importer) {
+    const lastFetched = (await LastFetch.findOne({ importer: importer}, { _id: 0, __v: 0 }))
 
     if (lastFetched === null) {
         return true
@@ -29,7 +29,7 @@ export async function allowedToFetch(seller) {
     const timeNow = new Date()
 
     if (timeNow - lastFetched["fetchTime"] < offSet) {
-        console.log(`${timeNow} - ${seller} - abort Update`)
+        console.log(`${timeNow} - ${importer} - abort Update`)
         return false
     }
 

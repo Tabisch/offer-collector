@@ -6,7 +6,8 @@ const connectionString = "mongodb://db/offers-collector";
 mongoose.connect(connectionString);
 
 const lastFetchSchema = new Schema({
-  seller: String,
+  importer: String,
+  type: String,
   fetchTime: Date,
 });
 
