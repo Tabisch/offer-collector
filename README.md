@@ -1,3 +1,6 @@
+This project is currently on hold. \
+I may pick it up, if i find the time.
+
 This is a project that is supposed to collect offers from stores locally and make them easily searchable. \
 The whole thing is still pretty rough, but it works.
 
@@ -8,6 +11,7 @@ The stores-table especially needs some work, bcs it is extremly slow.
 Open points:
 - add more stores
 - implemet better overview in frontend
+- implement notifications
 
 Screenshots:
 
